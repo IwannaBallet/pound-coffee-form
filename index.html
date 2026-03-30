@@ -1,3 +1,873 @@
+
+이거 구글 폼, 모바일로 자동화 입력하는 방법 없ㅇ르까? 매번 페이지 열때 마다
+
+https://docs.google.com/forms/d/e/1FAIpQLSenG6BlQLQiHc_hPuE71XIwVsYXoGWr6KgROdup2EnuPF1kig/viewform?fbzx=-9134521900415517587
+
+
+가능합니다. 방식은 몇 가지가 있는데, 제일 현실적인 건 “완전 자동 제출”보다는, 링크 열면 값이 미리 채워진 상태로 뜨게 만드는 것입니다.
+
+17s 동안 생각함
+있습니다. 다만 제일 안정적인 방법과 억지로 누르게 하는 방법이 다릅니다.
+
+가장 좋은 방법은, 폼 편집 권한이 있을 때 Google Forms의 Pre-fill form(미리 채우기) 기능으로 링크를 만드는 겁니다. 그러면 링크를 열 때마다 일부 값이 자동으로 채워진 상태로 뜹니다. Google 공식 도움말에도 폼 편집 화면에서 More → Pre-fill form → Get link로 미리 채운 링크를 만들 수 있다고 나와 있습니다. 
+
+반대로 편집 권한이 없는 남의 폼이라면, 모바일에서 완전 자동으로 입력·제출하려면 보통 Android 자동화 앱(예: Tasker + AutoInput)으로 화면 터치까지 흉내 내야 합니다. 이런 방식은 가능하지만, 폼 구조가 조금만 바뀌어도 잘 깨지고, 항목 위치가 달라지면 다시 손봐야 해서 꽤 불안정합니다. AutoInput은 안드로이드 앱 상호작용 자동화를 지원한다고 안내하고 있습니다. 
+
+정리하면:
+
+내가 만든/관리하는 폼 → 미리 채운 링크가 최선
+
+남이 만든 폼 → Tasker류 UI 자동화는 가능하지만 비추천
+
+매번 같은 값만 넣는 것이면, 홈 화면에 바로가기 만들어두고 열어서 마지막 한두 번만 탭하는 식이 현실적입니다
+
+원하면 내가 지금 이 링크 기준으로
+1) 편집 권한 있을 때 가장 빠른 방법
+또는
+2) 삼성/안드로이드 폰에서 Tasker 없이 최대한 간단히 자동화하는 방법
+둘 중 하나로 바로 단계별로 정리해드리겠습니다.
+
+
+업로드한 이미지
+편집 권한 없어. 그리고 단순히 내가 입력하는거 뿐만 아니라 다른 사람들도 다른 필드를 입력할 수 있으니까, 사용자마다 다르게 pre-fill 설정하게 할 수 있을까? (모바일에서)
+
+
+9s 동안 생각함
+가능은 합니다. 편집 권한이 없어도 사용자마다 다른 값을 넣은 상태로 폼을 열게 만드는 방식은 쓸 수 있습니다.
+
+핵심은 Google Form URL 뒤에 각 문항의 entry.숫자=값 을 붙이는 겁니다. 예를 들면 이런 식입니다.
+
+https://docs.google.com/forms/d/e/FORM_ID/viewform?usp=pp_url&entry.111111111=홍길동&entry.222222222=2026511999
+이렇게 하면 모바일에서도 링크를 열 때 이름, 학번 같은 값이 자동 입력된 상태로 시작할 수 있습니다.
+즉, 사용자마다 다른 링크를 만들어 주면 됩니다.
+
+문제는 딱 하나입니다.
+각 질문의 entry.숫자 값을 알아내야 한다는 점입니다.
+
+방법은 보통 2개입니다.
+
+폼 HTML 소스에서 entry. 값 찾기
+
+PC 브라우저에서 폼 열기
+
+개발자도구 / 페이지 소스 보기
+
+entry. 검색
+
+성명, 학번, 학과에 대응되는 번호 확인
+
+자동으로 링크 만들어주는 중간 페이지 만들기
+
+예: 간단한 웹페이지 / Apps Script / Notion 폼 / 미니 웹앱
+
+사용자가 자기 이름, 학번, 학과 선택
+
+그 값을 받아서 Google Form 링크로 리다이렉트
+
+모바일에서는 이게 제일 실용적입니다
+
+예를 들면 사용자별 흐름은 이렇게 갈 수 있습니다.
+
+사용자가 모바일에서 짧은 링크 접속
+
+이름 / 학번 / 학과 입력
+
+버튼 누르면
+
+Google Form이 자동으로 미리 채워진 상태로 열림
+
+사용자는 나머지 항목만 입력 후 제출
+
+즉, “사람마다 다르게 pre-fill”은 가능하고,
+편집 권한이 없어도 URL 파라미터 방식으로 우회할 수 있습니다.
+
+다만 주의할 점:
+
+라디오 버튼/객관식은 값이 정확히 옵션 텍스트와 맞아야 함
+
+질문 제목이 아니라 entry 번호가 중요함
+
+폼 구조가 바뀌면 entry 번호도 다시 확인해야 할 수 있음
+
+자동 제출까지 하려면 모바일에서는 꽤 불안정해서 보통 비추천
+
+네 상황에서는 제일 현실적인 구조가 이겁니다:
+
+추천 구조
+
+Google Form은 그대로 둠
+
+별도의 아주 작은 모바일용 입력 페이지 하나 만듦
+
+거기서 사용자별 정보 입력
+
+눌렀을 때 해당 값이 들어간 Form 링크로 이동
+
+원하면 내가 다음 답변에서 바로
+1) 이 구글폼에서 entry 번호 찾는 방법
+아니면
+2) 모바일용 사용자별 자동 pre-fill 링크 생성 HTML 예제
+둘 중 하나로 바로 만들어주겠습니다.
+
+
+폼 구조는 아마 당부간은 안 바낄거야, 그럼 뭐가 좋을까?
+
+2초 동안 생각함
+그럼 제일 좋은 건 “중간 링크 생성 페이지” 방식입니다.
+
+이유는 단순합니다.
+사용자마다 이름, 학번, 학과가 다르니까, 고정된 pre-fill 링크 하나로는 부족하고, 그렇다고 매번 직접 URL을 수정하는 건 너무 귀찮습니다.
+그래서 작은 웹페이지 하나를 만들어서:
+
+이름 입력
+
+학번 입력
+
+학과 선택
+
+버튼 누르기
+
+자동으로 Google Form pre-fill 링크 열기
+
+이 구조가 제일 낫습니다.
+
+왜 이게 좋은지 정리하면:
+
+모바일에서 쓰기 편함
+
+사람마다 다른 값 입력 가능
+
+폼 편집 권한 없어도 가능
+
+폼 구조가 안 바뀌면 거의 계속 사용 가능
+
+자동 제출까지 안 가도 입력 부담이 확 줄어듦
+
+반대로 덜 좋은 방법은:
+
+사용자마다 링크 수동 제작 → 관리 귀찮음
+
+Tasker 같은 모바일 자동터치 → 깨지기 쉽고 세팅 귀찮음
+
+네 상황에서는 실무적으로 이렇게 가면 됩니다:
+
+추천안
+
+먼저 구글폼의 각 필드 entry.xxx 번호 확인
+
+간단한 HTML 페이지 제작
+
+사용자가 모바일에서 자기 정보 입력
+
+버튼 누르면 미리 채워진 구글폼으로 이동
+
+예를 들면 이런 느낌입니다:
+
+성명
+
+학번
+
+학과
+
+폼 열기 버튼
+
+이 버튼이 내부적으로 이런 링크를 만들어 여는 거죠:
+
+...viewform?usp=pp_url&entry.성명번호=값&entry.학번번호=값&entry.학과번호=값
+
+결론적으로는
+“모바일용 간단한 입력 페이지 + 구글폼 pre-fill URL 생성”
+이게 가장 안정적이고 현실적입니다.
+
+원하면 바로 네가 쓸 수 있게 HTML 파일 하나로 작동하는 초간단 버전 만들어드리겠습니다.
+
+
+해봐, 그리고 해당 링크에 입력되고 (내가 제출만 누를 수 있게)
+
+1m 45s 동안 생각함
+파일 만들었습니다: google_form_prefill_mobile.html
+
+이 파일은 모바일에서 열어서
+
+성명
+
+학번
+
+학과
+
+를 입력하면, 값이 미리 들어간 구글폼 링크로 이동하게 되어 있습니다. 즉 폼에서 나머지는 이미 채워져 있고, 사용자는 제출만 누르면 되는 구조로 쓰는 템플릿입니다.
+
+다만 지금 바로 100% 작동하려면 딱 한 가지가 더 필요합니다.
+HTML 안의 이 3개를 실제 값으로 바꿔야 합니다.
+
+ENTRY_NAME
+
+ENTRY_STUDENT_ID
+
+ENTRY_DEPARTMENT
+
+즉 이런 식입니다.
+
+const ENTRY_NAME = "entry.123456789";
+const ENTRY_STUDENT_ID = "entry.987654321";
+const ENTRY_DEPARTMENT = "entry.555555555";
+왜 이게 필요하냐면, 구글폼 각 질문마다 내부 entry 번호가 다르기 때문입니다.
+지금은 네 폼의 실제 번호를 내가 확정할 수 없어서, 교체용 자리만 넣어둔 상태입니다.
+
+다음 단계는 둘 중 하나입니다.
+
+네가 그 entry.xxx 번호를 찾아서 넣는다
+
+내가 그 번호 찾는 방법을 아주 짧게 단계별로 알려준다
+
+원하면 바로 다음 답변에서
+모바일/PC 기준으로 entry 번호 찾는 가장 쉬운 방법만 딱 정리해주겠습니다.
+
+
+
+
+성명: 박해온
+학번: 2025512025
+학과: 인공지능융합학과 
+
+로 해봐
+
+39s 동안 생각함
+Tmp
+
+tmp
+
+값 넣어둔 버전으로 바꿔놨습니다: google_form_prefill_mobile_haeon.html
+
+지금 상태는
+
+성명: 박해온
+
+학번: 2025512025
+
+학과: 인공지능융합학과
+
+이 기본값으로 들어가 있습니다.
+다만 실제로 구글폼에 바로 꽂혀서 제출 직전 상태로 열리려면, 아직 폼의 실제 entry.xxx 번호 3개만 넣어야 합니다.
+
+즉, 마지막 남은 건 이것뿐입니다.
+
+ENTRY_NAME
+
+ENTRY_STUDENT_ID
+
+ENTRY_DEPARTMENT
+
+이 번호만 알면, 네가 누를 때마다 값이 이미 입력된 폼이 열리고 너는 제출만 누르면 됩니다.
+현재 내가 이 대화 안에서 폼의 보이는 질문 내용은 확인했지만, Google Forms의 내부 entry 번호는 이 화면만으로는 확정할 수 없었습니다. 
+
+가장 빠른 다음 단계는 이겁니다.
+
+PC에서 해당 폼 열기
+
+페이지 소스 보기
+
+entry. 검색
+
+번호 3개만 나한테 보내기
+
+그러면 내가 바로 완성본 링크나 완성된 HTML로 마무리해드리겠습니다.
+
+
+
+
+
+
+
+너가 직접 확인해줄 수 있어?
+
+내가 직접 폼 화면에서 입력칸(성명/학번/학과)은 확인했는데, Google Forms 내부 필드 번호(entry.숫자) 는 이 환경에서 view-source/개발자도구까지 열어야 보여서 지금 여기서 바로 “확정된 entry 번호”를 읽어오진 못했어.
+
+다만 네가 아래 3개 번호만 한 번 알려주면, 그 다음은 내가 박해온 / 2025512025 / 인공지능융합학과가 자동 입력된 링크를 완성해서 “열면 제출만 누르는” 상태로 만들어줄 수 있어.
+
+네가 해줘야 하는 최소 정보(3개 번호)
+성명: entry.???????
+
+학번: entry.???????
+
+학과: entry.???????
+
+번호 찾는 가장 쉬운 방법(PC/모바일)
+폼 링크 열기
+
+주소창에 view-source: 를 붙여서 열기
+
+예: view-source:https://docs.google.com/forms/d/e/.../viewform?...
+
+페이지에서 entry. 검색 (Ctrl+F 또는 search)
+
+성명/학번/학과에 해당하는 entry.1234567890 같은 번호 3개 복사해서 보내주기
+
+그럼 내가 바로 완성 링크 만들어줄게.
+
+방문한 탭
+
+
+파운드커피 간식 수령
+docs.google.com
+
+
+
+붙여넣은 텍스트 (1).txt
+문서
+이건가?
+
+7s 동안 생각함
+응, 이거 맞습니다.
+여기서 실제 필드 번호까지 확인됐어요.
+
+성명 → entry.793922929
+
+학번 → entry.1390898428
+
+학과 → entry.1094568554
+
+그래서 네 값으로 바로 열리는 링크는 이겁니다.
+
+https://docs.google.com/forms/d/e/1FAIpQLSenG6BlQLQiHc_hPuE71XIwVsYXoGWr6KgROdup2EnuPF1kig/viewform?usp=pp_url&entry.793922929=%EB%B0%95%ED%95%B4%EC%98%A8&entry.1390898428=2025512025&entry.1094568554=%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%9C%B5%ED%95%A9%ED%95%99%EA%B3%BC
+그리고 바로 쓸 수 있게 완성본 HTML도 만들어뒀습니다: google_form_prefill_ready.html
+
+이 파일은 열면:
+
+박해온
+
+2025512025
+
+인공지능융합학과
+
+가 기본값으로 들어가 있고, 버튼 누르면 이미 입력된 구글폼으로 이동합니다. 즉, 너는 거의 제출만 누르면 되는 상태입니다.
+다만 최종 제출 자체를 완전 자동으로 누르게 하는 건 모바일에서 불안정해서, 지금 방식이 제일 깔끔합니다. 
+
+
+
+
+
+좋아. 동일하게, 이거 다른 학우들을 위해 자기가 필드 값을 한번 입력하면 자기가 제출하는 그렇게 할 수 있나?
+
+7s 동안 생각함
+된다. 그게 더 맞는 방식이다.
+
+즉 구조를 이렇게 하면 된다.
+
+학우가 링크 열기
+
+자기 성명 / 학번 / 학과 입력
+
+버튼 누르기
+
+미리 입력된 구글폼으로 이동
+
+본인이 제출 누르기
+
+이미 그 용도로 쓸 수 있게 파일 만들어뒀다: google_form_prefill_shared.html
+
+이 파일은:
+
+누구에게나 같은 링크로 공유 가능
+
+각자가 자기 정보 입력 가능
+
+Google Form 필드 번호도 이미 반영됨
+
+마지막 제출만 Google Form에서 하면 됨
+
+실무적으로는 이걸 GitHub Pages나 Vercel에 올려서 링크 배포하는 게 제일 낫다.
+원하면 내가 바로 다음으로 이 파일을 GitHub Pages로 올리는 가장 쉬운 방법까지 딱 정리해주겠다. 
+
+
+
+
+응응 배포해줘 github pages, 새로운 repo 하나 만들어줘
+
+
+GitHub Pages 배포는 가능하지만, 새 repo 생성/Pages 설정은 너의 GitHub 계정에서 로그인 상태로 진행해야 해서 내가 지금 당장 클릭으로 대신 처리해줄 수는 없어.
+
+대신 그대로 따라 하면 5분 안에 끝나는 절차를 정리해줄게. (너만의 repo 하나 만들고 HTML 하나 올리는 방식)
+
+0) HTML 파일 이름
+배포하려면 google_form_prefill_shared.html을 index.html로 이름 바꿔서 올리는 게 깔끔해.
+
+1) 새 저장소 만들기
+https://github.com/new
+
+Repository name: pound-coffee-form 같은 걸로 입력
+
+Public 선택
+
+README는 있어도 되고 없어도 됨(있으면 편해)
+
+Create repository
+
+2) index.html 업로드
+저장소 들어가서 Add file → Upload files
+
+index.html 업로드
+
+Commit changes
+
+3) GitHub Pages 켜기
+저장소 Settings (상단 탭)
+
+왼쪽 메뉴에서 Pages
+
+Source: Deploy from a branch 선택
+
+Branch: main (또는 master) / Folder: /root 선택 후 Save
+
+4) 배포 URL 확인
+몇 분 후 Pages URL이 뜨면, 그 링크가 학우들에게 공유할 URL이야.
+
+원하면 내가:
+
+repo 이름/설정 옵션(브랜치/폴더)을 네 계정 기준으로 더 안전하게 확정
+
+README/설명 포함해 템플릿 만들어주는 것
+도 해줄게.
+
+방문한 탭
+
+
+docs.google.com
+docs.google.com
+
+
+how do i upload file on github?
+
+Uploading a file to GitHub is straightforward once your repository exists.
+
+If you want to use GitHub’s web UI (simplest)
+Go to your repo on GitHub (e.g., https://github.com/<yourname>/<repo>).
+
+Click Add file (near top-right).
+
+Choose Upload files.
+
+Drag-and-drop your file (or use the file picker).
+
+Scroll down to Commit changes:
+
+Add a short message (optional).
+
+Click Commit changes.
+
+That’s it—file is now in the repo.
+
+Important for GitHub Pages
+If you’re trying to deploy a simple page, make sure your uploaded file is named index.html (GitHub Pages uses that as the default page).
+
+방문한 탭
+
+
+docs.google.com
+docs.google.com
+
+
+do i have to create codespace first?
+
+No. You do not need Codespaces for this.
+
+You’re on the wrong page. For a simple GitHub Pages site, just upload the file to the repo in the normal repo view.
+
+Do this:
+
+Open your repo: IwannaBallet/pound-coffee-form
+
+Click Add file
+
+Click Upload files
+
+Upload your HTML file
+
+Rename it to index.html if needed
+
+Commit changes
+
+Then:
+
+Go to Settings
+
+Open Pages
+
+Under Source, choose Deploy from a branch
+
+Select main and /root
+
+Save
+
+After that, GitHub will give you the Pages URL.
+
+
+
+i don't see add file option
+
+You’re in an empty repository view, so GitHub is showing “creating a new file” / “uploading an existing file” as text links instead of the usual Add file button.
+
+Use this link on the page:
+
+“uploading an existing file”
+
+Or open this directly:
+
+https://github.com/IwannaBallet/pound-coffee-form/upload
+
+Then:
+
+Upload your HTML file
+
+Name it index.html
+
+Click Commit changes
+
+After that, go to:
+
+Settings → Pages
+
+Source: Deploy from a branch
+
+Branch: main
+
+Folder: /root
+
+Save
+
+Then your site will be live.
+
+
+
+so i only need to upload this file?
+
+google_form_prefill_shared.html
+
+Yes. For this setup, that is the only file you need.
+
+But before uploading, do one thing:
+
+rename google_form_prefill_shared.html → index.html
+
+Then upload that one file and commit it.
+
+After that:
+
+go to Settings
+
+go to Pages
+
+set:
+
+Source: Deploy from a branch
+
+Branch: main
+
+Folder: /root
+
+save
+
+Then your site should be published at something like:
+
+https://iwannaballet.github.io/pound-coffee-form/
+
+One important note: do not upload google_form_prefill_ready.html unless you want your own personal info prefilled for everyone. For sharing with classmates, the correct file is the shared one.
+
+
+
+okay and the how do i publish it?
+
+You’ve uploaded the file, but it’s still named google_form_prefill_shared.html. For GitHub Pages, rename it to index.html first.
+
+Do this:
+
+Click google_form_prefill_shared.html
+
+Click the pencil / edit icon
+
+Change the filename at the top to index.html
+
+Commit changes
+
+Then publish:
+
+Click Settings
+
+In the left menu, click Pages
+
+Under Build and deployment:
+
+Source → Deploy from a branch
+
+Branch → main
+
+Folder → /root
+
+Click Save
+
+Then wait a minute or two. Your site should appear at:
+
+https://iwannaballet.github.io/pound-coffee-form/
+
+Since you already uploaded the file, you’re close. The only real issue now is the filename.
+
+
+
+why do i need it to change it to index.html?
+
+6s 동안 생각함
+Because GitHub Pages looks for a default homepage file.
+
+When someone visits your repo site, GitHub Pages tries to load the main entry page, and for a simple static site that file is typically:
+
+index.html
+
+So if your file is named google_form_prefill_shared.html, the site may publish, but the root URL:
+
+https://iwannaballet.github.io/pound-coffee-form/
+
+won’t automatically know that this is the page to open.
+
+Instead, with the current filename, the working URL would usually be more like:
+
+https://iwannaballet.github.io/pound-coffee-form/google_form_prefill_shared.html
+
+Why index.html is better:
+
+it becomes the default landing page
+
+users can open the shorter root URL
+
+it is the standard setup for static hosting
+
+So it’s not that GitHub forbids the other filename. It’s just that index.html makes the site open cleanly from the main link.
+
+In your case:
+
+keep google_form_prefill_shared.html if you want, but then share the full file path URL
+
+rename to index.html if you want the clean repo homepage URL to work
+
+You should rename it to index.html.
+
+
+
+okay i changed it now whre do i publish it?
+
+몇 초 동안 생각함
+Now go here:
+
+Settings → Pages
+
+You already have Settings visible in the repo top menu. Then:
+
+Click Settings
+
+In the left sidebar, click Pages
+
+Under Build and deployment:
+
+Source: Deploy from a branch
+
+Branch: main
+
+Folder: /root
+
+Click Save
+
+Then wait a bit. Your site should publish at:
+
+https://iwannaballet.github.io/pound-coffee-form/
+
+If the Pages section is hard to find, open this directly:
+
+https://github.com/IwannaBallet/pound-coffee-form/settings/pages
+
+Once you’re there, send me a screenshot or tell me what options you see.
+
+
+
+good, but still whenvevver i input the info in this link does it save the info?
+
+https://iwannaballet.github.io/pound-coffee-form/
+
+몇 초 동안 생각함
+No. That GitHub Pages link itself does not save the info.
+
+What happens is:
+
+user types 성명 / 학번 / 학과 on your page
+
+the page builds a Google Form URL with those values
+
+it opens the Google Form
+
+only when they press Submit on Google Form does Google save the response
+
+So:
+
+GitHub Pages page → does not store responses
+
+Google Form → stores responses
+
+
+
+good, but still whenvevver i input the info in this link does it save the info? and renew it or refresht it don't i need to input again?
+
+https://iwannaballet.github.io/pound-coffee-form/
+
+몇 초 동안 생각함
+Right now, no — if they refresh or reopen the page, they will need to type it again.
+
+Your current index.html only:
+
+takes the values temporarily in the browser
+
+uses them to open the pre-filled Google Form
+
+does not store them anywhere for later reuse
+
+So the current behavior is:
+
+open site
+
+type info
+
+click button
+
+go to form
+
+if they come back later or refresh the GitHub Pages page, fields reset
+
+If you want, there are two better options:
+
+1. Save locally in the browser
+
+easiest
+
+each person enters once on their own phone
+
+next time they open the same link on the same browser/device, the fields auto-fill again
+
+no server needed
+
+2. Save in Google Form / account side
+
+harder
+
+not really controlled from your GitHub Pages page
+
+depends on Google settings and login behavior
+
+For your use case, local browser save is the right answer.
+That means using localStorage, so:
+
+first visit: they enter name/student ID/department
+
+later: page remembers it
+
+they can still edit it anytime
+
+refresh won’t erase it
+
+Your current page does not do that yet, but it’s a very small change.
+I can give you the exact code to paste into index.html so it remembers each student’s info automatically.
+
+
+
+okay so do it 1
+
+I’m updating the page so each user’s info is remembered on their own device and auto-fills next time.
+
+6s 동안 생각함
+Done. Use this updated file: index_with_localstorage.html
+
+What changed:
+
+each user’s 성명 / 학번 / 학과 is saved in their own browser with localStorage
+
+when they reopen or refresh the page on the same device/browser, it auto-fills
+
+added 저장된 정보 지우기 button in case they want to reset it
+
+What you need to do on GitHub:
+
+open your current index.html
+
+replace all contents with the contents of this new file
+
+commit changes
+
+Then the same GitHub Pages link will remember each person’s info on their own device. 
+
+
+
+
+
+okay then can you delete the orignial file and upload this file?
+
+7s 동안 생각함
+I can’t directly click through GitHub’s file delete/upload flow from here.
+
+But you do not need to upload a new file if you just want the saved-info version live. The faster move is:
+
+Open index.html
+
+Click Edit this file
+
+Replace the whole contents with the new file content
+
+Commit changes
+
+And for the old file:
+
+Go back to the repo root
+
+Click google_form_prefill_shared.html
+
+Click Delete this file
+
+Commit changes
+
+That’s enough. Your Pages site is already connected to main and /root, so once index.html is updated, the live link will refresh automatically.
+
+
+
+Replace the whole contents with the new file content
+
+->how do i eplace the content? just copy and paste?
+
+Yes. Just select all, delete, and paste the new code.
+
+On that GitHub edit page:
+
+Tap inside the big code box
+
+Select all existing code
+
+Delete it
+
+Paste the full new HTML code
+
+Scroll down
+
+Click Commit changes
+
+On mobile, the easiest way is usually:
+
+long press inside the code area
+
+tap Select all
+
+paste the new content
+
+One important thing: because the file is long, do not paste only part of it. You need to replace the entire file.
+
+Use this updated file content from here:
+index_with_localstorage.html
+
+After you commit, GitHub Pages will update automatically.
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -39,6 +909,11 @@
       border: none;
       font-weight: 700;
       cursor: pointer;
+    }
+    .secondary {
+      background: #f3f4f6;
+      color: #222;
+      margin-top: 10px;
     }
     .note {
       margin-top: 16px;
@@ -82,11 +957,12 @@
     </select>
 
     <button onclick="goToForm()">미리 입력된 폼 열기</button>
+    <button class="secondary" onclick="clearSavedInfo()">저장된 정보 지우기</button>
     <a class="direct" id="directLink" href="#" target="_blank" rel="noopener">직접 링크 열기</a>
 
-    <div class="small">참고: 이 페이지는 자동 입력까지만 해주고, 실제 제출은 Google Form에서 직접 누르는 방식입니다.</div>
+    <div class="small">이 기기/브라우저에서는 입력한 정보가 저장되어 다음에 다시 열어도 자동으로 채워집니다.</div>
     <div class="note">
-      같은 링크를 다른 학우들에게 공유해도 됩니다. 각자 자기 정보만 입력해서 제출하면 됩니다.
+      같은 링크를 다른 학우들에게 공유해도 됩니다. 각자 자기 기기에서 한 번 입력하면 다음부터는 다시 입력할 필요가 없습니다.
     </div>
   </div>
 
@@ -96,35 +972,82 @@
     const ENTRY_STUDENT_ID = "entry.1390898428";
     const ENTRY_DEPARTMENT = "entry.1094568554";
 
+    const STORAGE_KEYS = {
+      name: "poundCoffee_name",
+      studentId: "poundCoffee_studentId",
+      department: "poundCoffee_department",
+    };
+
+    const nameInput = document.getElementById("name");
+    const studentIdInput = document.getElementById("studentId");
+    const departmentInput = document.getElementById("department");
+    const directLink = document.getElementById("directLink");
+
+    function saveInputs() {
+      localStorage.setItem(STORAGE_KEYS.name, nameInput.value.trim());
+      localStorage.setItem(STORAGE_KEYS.studentId, studentIdInput.value.trim());
+      localStorage.setItem(STORAGE_KEYS.department, departmentInput.value);
+      syncLink();
+    }
+
+    function loadSavedInputs() {
+      const savedName = localStorage.getItem(STORAGE_KEYS.name) || "";
+      const savedStudentId = localStorage.getItem(STORAGE_KEYS.studentId) || "";
+      const savedDepartment = localStorage.getItem(STORAGE_KEYS.department) || "";
+
+      nameInput.value = savedName;
+      studentIdInput.value = savedStudentId;
+      departmentInput.value = savedDepartment;
+    }
+
     function buildUrl() {
-      const name = encodeURIComponent(document.getElementById("name").value.trim());
-      const studentId = encodeURIComponent(document.getElementById("studentId").value.trim());
-      const department = encodeURIComponent(document.getElementById("department").value);
+      const name = encodeURIComponent(nameInput.value.trim());
+      const studentId = encodeURIComponent(studentIdInput.value.trim());
+      const department = encodeURIComponent(departmentInput.value);
 
       return `${FORM_URL}?usp=pp_url&${ENTRY_NAME}=${name}&${ENTRY_STUDENT_ID}=${studentId}&${ENTRY_DEPARTMENT}=${department}`;
     }
 
     function syncLink() {
-      document.getElementById("directLink").href = buildUrl();
+      directLink.href = buildUrl();
     }
 
     function goToForm() {
-      const name = document.getElementById("name").value.trim();
-      const studentId = document.getElementById("studentId").value.trim();
-      const department = document.getElementById("department").value.trim();
+      const name = nameInput.value.trim();
+      const studentId = studentIdInput.value.trim();
+      const department = departmentInput.value.trim();
 
       if (!name || !studentId || !department) {
         alert("성명, 학번, 학과를 모두 입력해주세요.");
         return;
       }
 
+      saveInputs();
       window.location.href = buildUrl();
     }
 
-    document.getElementById("name").addEventListener("input", syncLink);
-    document.getElementById("studentId").addEventListener("input", syncLink);
-    document.getElementById("department").addEventListener("change", syncLink);
+    function clearSavedInfo() {
+      localStorage.removeItem(STORAGE_KEYS.name);
+      localStorage.removeItem(STORAGE_KEYS.studentId);
+      localStorage.removeItem(STORAGE_KEYS.department);
+
+      nameInput.value = "";
+      studentIdInput.value = "";
+      departmentInput.value = "";
+      syncLink();
+      alert("저장된 정보를 지웠습니다.");
+    }
+
+    nameInput.addEventListener("input", saveInputs);
+    studentIdInput.addEventListener("input", saveInputs);
+    departmentInput.addEventListener("change", saveInputs);
+
+    loadSavedInputs();
     syncLink();
   </script>
 </body>
 </html>
+
+
+
+pound-coffee-form/index.html at main · IwannaBallet/pound-coffee-form
